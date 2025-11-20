@@ -1,0 +1,60 @@
+=============Schema (mongoose.Schema)=============
+Think of a Schema as the blueprint or structure of your collection.
+It defines the fields, types, default values, required fields, enums, etc.
+It does NOT interact with the database by itself.
+
+Example:
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  role: { type: String, default: "customer" }
+});
+
+
+=============Model (mongoose.model)===============
+A Model is a JavaScript class that represents a collection in MongoDB.
+You use the model to create, read, update, delete documents.
+Model connects the schema to the actual database collection.
+MongoDB automatically creates the users collection if it doesn’t exist.
+
+Example:
+const User = mongoose.model("User", userSchema);
+
+await User.create({ name: "Lakshitha", email: "l@example.com" });
+const users = await User.find();
+
+Note:
+1) Unique ID (_id)
+MongoDB automatically creates _id for every document.
+It’s a unique 12-byte ObjectId (hex string) by default.
+You don’t need to create it manually.
+
+you can provide your own _id if you want:
+EX: await User.create({ _id: "12345", name: "Lakshitha", email: "l@example.com" });
+
+MongoDB will use this _id instead of auto-generating one.
+But in real-world apps, it’s recommended to use default ObjectId, because it’s globally unique and optimized.
+
+2) Created and Updated Timestamp
+{ timestamps: true } : Automatically adds two fields to each document:createdAt,updatedAt
+MongoDB automatically updates updatedAt whenever you modify the document.
+You cannot enable only one using this option.
+If you want only one, you’d have to create that field manually in the schema.
+
+EX:
+const userSchema = new mongoose.Schema({
+  name: String,
+  email: String
+}, { timestamps: true });
+
+3) referencing another collection
+EX: category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" }
+- type: mongoose.Schema.Types.ObjectId → the value stored is the unique ID (_id) of a document in another collection.
+- ref: "Category" → tells Mongoose that this ID refers to the Category collection.
+- This is called a “reference” or “relationship” between collections.
+- So every MenuItem belongs to a Category.
+
+If you want multiple categories
+Ex: categories: [{ type: mongoose.Schema.Types.ObjectId, ref: "Category" }]
+categories: [{ type: mongoose.Schema.Types.ObjectId, ref: "Category" }]
+Now, a menu item can belong to many categories.
