@@ -1,0 +1,29 @@
+====Use it ONLY the first time to create package.json.====
+npm init -y
+
+====Change "main":Since your app starts from server.js, change:====
+"main": "server.js"
+
+=====Add Type: This allows you to use ES6 import/export syntax instead of require=====
+"type": "module"
+
+=====Add "scripts"======
+"scripts": {
+  "start": "node server.js",    // npm start
+  "dev": "nodemon server.js"    // npm run dev
+}
+
+====install libraries======
+npm install express mongoose cors dotenv cookie-parser bcryptjs jsonwebtoken
+
+npm install --save-dev 
+
+express         → API server
+mongoose        → MongoDB connection
+cors            → allow frontend requests
+dotenv          → environment variables
+cookie-parser   → handle cookies (optional for auth later)
+morgan          → logs API requests (dev debugging)
+nodemon         → auto restart server while developing
+bcryptjs        → hash passwords
+jsonwebtoken    → generate JWT token for login
